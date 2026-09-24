@@ -15,12 +15,17 @@ import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.inspection import permutation_importance
 
+import build_site
 from uq_certification import plots
 from uq_certification import simulator as sim
 from uq_certification.closed_loop import run_closed_loop
 from uq_certification.conformal import ConformalDetector, coverage
 from uq_certification.maturity import LEVEL_NAMES, TARGET_COVERAGE, assess
-from uq_certification.measures import error_detection_auroc, expected_calibration_error
+from uq_certification.measures import (
+    error_by_uncertainty_quantile,
+    error_detection_auroc,
+    expected_calibration_error,
+)
 from uq_certification.tradeoffs import choose_policy, pareto_mask, policy_rates, sweep
 
 # Notional costs of a missed drone, a false alarm and an operator review. A miss
@@ -77,6 +82,19 @@ def collect_evidence(model, X_test, s_test, X_cal, s_cal, guided_rounds, restric
     }
 
 
+def constrained_front(rates, max_deferral):
+    """Policies within operator capacity that are Pareto-optimal on (miss, false alarm).
+
+    Over all three objectives nearly every grid policy is Pareto-optimal (more
+    deferral always buys fewer errors), so that front rules nothing out. Fixing
+    the workload budget first leaves a real two-objective front to choose from.
+    """
+    feasible = np.flatnonzero(rates[:, 2] <= max_deferral)
+    front = np.zeros(len(rates), dtype=bool)
+    front[feasible[pareto_mask(rates[feasible, :2])]] = True
+    return front
+
+
 def uncertainty_importance(out, scenes, seed=0):
     """Which scene parameters explain the model's uncertainty (feature attribution)."""
     Z = scenes.param_matrix()
@@ -102,6 +120,9 @@ def summarise(ev):
         "conformal_coverage_mondrian": float(hit_g.mean()),
         "conformal_drone_coverage_mondrian": float(hit_g[y == 1].mean()),
         "ambiguous_set_rate_mondrian": float((ev["sets_mondrian"].sum(axis=1) == 2).mean()),
+        "error_by_uncertainty_decile": [
+            float(e) for e in error_by_uncertainty_quantile(ev["outputs"]["total"], p, y)
+        ],
         "policy": {"t": ev["policy"].t, "tau": ev["policy"].tau},
         "policy_rates": ev["policy_rates"],
     }
@@ -155,7 +176,15 @@ def main():
 
     # 4. Multi-objective trade-off (final model, calibration data).
     policies, rates, idx = evidence["after closed loop"]["sweep"]
-    plots.tradeoffs(rates, pareto_mask(rates), idx, args.out / "fig5_tradeoffs.png")
+    front = constrained_front(rates, MAX_DEFERRAL)
+    plots.tradeoffs(rates, front, idx, MAX_DEFERRAL, args.out / "fig5_tradeoffs.png")
+    pareto_summary = {
+        "n_policies": int(len(rates)),
+        "n_pareto_3_objectives": int(pareto_mask(rates).sum()),
+        "n_within_capacity": int((rates[:, 2] <= MAX_DEFERRAL).sum()),
+        "n_constrained_front": int(front.sum()),
+        "chosen_on_constrained_front": bool(front[idx]),
+    }
 
     # 5. Maturity scorecards: full operational domain and a restricted, declared one.
     scorecards = {k: assess(ev) for k, ev in evidence.items()}
@@ -179,13 +208,34 @@ def main():
         "maturity_levels": {k: {a.characteristic: a.level for a in sc} for k, sc in scorecards.items()},
         "maturity_levels_restricted_od": {a.characteristic: a.level for a in scorecards_restricted},
         "model_restricted_od": summarise(restricted_ev),
+        "pareto": pareto_summary,
+        "cost_weights": COST_WEIGHTS,
+        "max_deferral": MAX_DEFERRAL,
+        "scorecards": {
+            label: [_assessment_dict(a) for a in sc]
+            for label, sc in {**scorecards, "after closed loop, restricted domain": scorecards_restricted}.items()
+        },
         "restricted_od_excluded_cells": [
             sim.cell_label(c) for c in range(sim.N_CELLS) if c not in restricted_ev["declared_cells"]
         ],
     }
     (args.out / "metrics.json").write_text(json.dumps(metrics, indent=2, default=float))
     write_report(args, metrics, scorecards, scorecards_restricted, restricted_ev, evidence)
+    if args.out == Path("results"):
+        site = build_site.build(args.out)
+        print(f"Site written to {site}")
     print(f"Done in {time.time() - start:.0f}s. See {args.out}/report.md")
+
+
+def _assessment_dict(a):
+    return {
+        "characteristic": a.characteristic,
+        "level": a.level,
+        "criteria": [
+            {"level": c.level, "requirement": c.requirement, "passed": bool(c.passed), "evidence": c.evidence}
+            for c in a.criteria
+        ],
+    }
 
 
 def _mean_sd(values):
@@ -231,6 +281,7 @@ def write_report(args, metrics, scorecards, scorecards_restricted, restricted_ev
         ]
     )
     pol = m_final["policy"]
+    par = metrics["pareto"]
     pr = m_final["policy_rates"]
     imp = sorted(metrics["uncertainty_importance"].items(), key=lambda kv: -kv[1])
     levels = metrics["maturity_levels"]
@@ -290,7 +341,16 @@ operator-capacity constraint of at most {MAX_DEFERRAL:.0%} deferrals (the
 epsilon-constraint method: a weighted sum alone lands on extremes such as
 alarming on everything or deferring half of all cases). Selected on
 calibration data: alarm threshold t = {pol['t']:.2f}, deferral when total
-uncertainty > {pol['tau']:.3f} bits. On the test set: miss rate {pr['miss']:.3f},
+uncertainty > {pol['tau']:.3f} bits.
+
+On Pareto optimality: over all three objectives, {par['n_pareto_3_objectives']} of
+{par['n_policies']} grid policies are Pareto-optimal. More deferral always buys
+fewer errors (deferred cases are assumed resolved correctly), so that front
+rules almost nothing out. Among the {par['n_within_capacity']} policies within
+operator capacity, {par['n_constrained_front']} lie on the miss vs false-alarm
+Pareto front (the orange line). The chosen policy
+{'is' if par['chosen_on_constrained_front'] else 'is not'} on that front. So the
+Pareto analysis narrows the menu and the explicit weights make the final choice. On the test set: miss rate {pr['miss']:.3f},
 false-alarm rate {pr['false_alarm']:.3f}, deferral rate {pr['deferral']:.3f}.
 
 ![trade-offs](fig5_tradeoffs.png)

@@ -56,7 +56,16 @@ operator-capacity constraint of at most 20% deferrals (the
 epsilon-constraint method: a weighted sum alone lands on extremes such as
 alarming on everything or deferring half of all cases). Selected on
 calibration data: alarm threshold t = 0.21, deferral when total
-uncertainty > 0.882 bits. On the test set: miss rate 0.046,
+uncertainty > 0.882 bits.
+
+On Pareto optimality: over all three objectives, 369 of
+369 grid policies are Pareto-optimal. More deferral always buys
+fewer errors (deferred cases are assumed resolved correctly), so that front
+rules almost nothing out. Among the 246 policies within
+operator capacity, 41 lie on the miss vs false-alarm
+Pareto front (the orange line). The chosen policy
+is on that front. So the
+Pareto analysis narrows the menu and the explicit weights make the final choice. On the test set: miss rate 0.046,
 false-alarm rate 0.144, deferral rate 0.200.
 
 ![trade-offs](fig5_tradeoffs.png)

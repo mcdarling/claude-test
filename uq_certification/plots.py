@@ -171,26 +171,29 @@ def closed_loop(histories: dict, added: dict, path):
     _save(fig, path)
 
 
-def tradeoffs(rates, pareto, chosen_idx, path):
-    fig, ax = plt.subplots(figsize=(6.2, 4.6))
-    ax.scatter(
-        rates[~pareto, 1], rates[~pareto, 0], c=rates[~pareto, 2], cmap=SEQUENTIAL, s=10, alpha=0.35, lw=0,
-        vmin=0, vmax=rates[:, 2].max(),
-    )
+def tradeoffs(rates, front, chosen_idx, max_deferral, path):
+    """All candidate policies, the miss/false-alarm Pareto front among those within
+    operator capacity, and the chosen operating point."""
+    fig, ax = plt.subplots(figsize=(6.4, 4.6))
     sc = ax.scatter(
-        rates[pareto, 1], rates[pareto, 0], c=rates[pareto, 2], cmap=SEQUENTIAL, s=26,
-        edgecolors=SURFACE, linewidths=1, vmin=0, vmax=rates[:, 2].max(), label="Pareto-optimal policies",
+        rates[:, 1], rates[:, 0], c=rates[:, 2], cmap=SEQUENTIAL, s=9, lw=0,
+        vmin=0, vmax=rates[:, 2].max(),
     )
     no_defer = rates[:, 2] == 0
     order = np.argsort(rates[no_defer, 1])
-    ax.plot(rates[no_defer, 1][order], rates[no_defer, 0][order], color=SERIES[1], lw=1.5, label="no deferral")
+    ax.plot(rates[no_defer, 1][order], rates[no_defer, 0][order], color=TEXT_2, lw=1, ls="--", label="no deferral")
+    order = np.argsort(rates[front, 1])
+    ax.plot(
+        rates[front, 1][order], rates[front, 0][order], color=SERIES[1], lw=2, marker="o", ms=4,
+        label=f"Pareto front, deferral ≤ {max_deferral:.0%}",
+    )
     ax.scatter(
-        rates[chosen_idx, 1], rates[chosen_idx, 0], s=140, marker="*", color=SERIES[1],
+        rates[chosen_idx, 1], rates[chosen_idx, 0], s=160, marker="*", color=SERIES[1],
         edgecolors=TEXT, linewidths=0.8, zorder=5, label="chosen (min expected cost)",
     )
     fig.colorbar(sc, ax=ax, label="Deferral rate (operator workload)")
     ax.set(
-        title="Missed drones vs false alarms vs operator load",
+        title="Missed drones vs false alarms within operator capacity",
         xlabel="False alarm rate",
         ylabel="Miss rate",
         xlim=(0, 0.6),

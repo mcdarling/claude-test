@@ -2,8 +2,10 @@
 
 Follows the paper's structure: each trustworthiness characteristic has levels
 1-5, each level lists the evidence required, and levels are cumulative (level
-3 needs everything from levels 1-3). The numeric thresholds are notional,
-fixed before running the experiment, and meant for illustration only.
+3 needs everything from levels 1-3). The numeric thresholds are notional and
+meant for illustration only. They were fixed before the first run, except the
+false-alarm limit in Safety L3, which was added after that run exposed a
+loophole (see results/report.md).
 
 Level 5 needs formal verification of system components. Nothing in this demo
 attempts that, so it is always reported as not met.
@@ -29,7 +31,7 @@ LEVEL_NAMES = {
     5: "Formal verification",
 }
 
-# Pre-registered thresholds.
+# Thresholds (all fixed before the first run except FALSE_ALARM_L3).
 MIN_CELL_SAMPLES = 50
 WORST_CELL_ACC = 0.70
 ECE_L2, ECE_L3 = 0.10, 0.05

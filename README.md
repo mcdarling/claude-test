@@ -26,6 +26,16 @@ pytest -q                   # unit tests for the core math
 
 Then open [`results/report.md`](results/report.md).
 
+## Certification report site
+
+`docs/index.html` is a self-contained report for a general technical audience.
+It explains maturity models from scratch, shows the rubric, and walks through
+how the system scored, with the evidence behind every level. `run_demo.py`
+regenerates it automatically (or run `python build_site.py` on its own).
+
+To publish it with GitHub Pages: **Settings → Pages → Build and deployment →
+Deploy from a branch → `main` / `docs`**.
+
 ## How the paper maps to the code
 
 | Paper concept | Where it lives | What it does here |
@@ -36,7 +46,7 @@ Then open [`results/report.md`](results/report.md).
 | Formal properties: conformal prediction | `conformal.py` | Split conformal with a 90% coverage guarantee, including a per-condition, per-class (Mondrian) variant whose drone-class coverage bounds the miss rate. |
 | Closed loop: generate data similar to high-uncertainty samples, retrain, reassess | `closed_loop.py` | Epistemic uncertainty on a candidate pool picks seeds; their scene parameters are perturbed to make new data. Compared against a random-data baseline. |
 | Feature attribution (open question in the paper) | `run_demo.py` | A random forest plus permutation importance attributes uncertainty back to scene parameters. |
-| Multi-objective trade-offs: misses vs false alarms vs operator trust | `tradeoffs.py` | Sweep of alarm threshold and deferral threshold, a Pareto front, and an explicit cost-weighted choice under an operator-capacity constraint. |
+| Multi-objective trade-offs: misses vs false alarms vs operator trust | `tradeoffs.py` | Sweep of alarm threshold and deferral threshold, a miss vs false-alarm Pareto front among policies within operator capacity, and an explicit cost-weighted choice. |
 | Actionable outputs and runtime guardrails | `tradeoffs.py`, `conformal.py` | High uncertainty or an ambiguous conformal set sends the case to a human operator. |
 | Maturity levels with required evidence | `maturity.py` | Cumulative levels 1–5 for reliability, robustness and safety. Every criterion records the evidence behind it. |
 | Operational domain specification (requirements phase) | `run_demo.py` | Scores the full domain and a restricted one that excludes cells the system can't handle. |
@@ -62,7 +72,10 @@ These numbers come from the latest `results/report.md`. Rerun to regenerate them
 4. **Weighted-sum trade-offs land on extremes.** A heavily miss-averse
    weighting alarmed on 69% of empty scenes. Cheap operator reviews made it
    defer half of all cases. Adding an operator-capacity constraint (the
-   ε-constraint method) gave a sensible operating point.
+   ε-constraint method) gave a sensible operating point. Pareto filtering
+   over all three objectives ruled out almost nothing, because more deferral
+   always buys fewer errors. It only became informative once the workload
+   budget was fixed and the front was taken over misses and false alarms.
 5. **The scorecard produces useful results:**
    - **Reliability drops from L4 to L3 after the loop.** Conformal prediction's
      *marginal* 90% guarantee held, but coverage on the drone class alone fell
@@ -86,10 +99,11 @@ uq_certification/
   measures.py     calibration, error detection, confidence bounds
   conformal.py    split + Mondrian conformal prediction
   closed_loop.py  uncertainty-guided vs random data generation
-  tradeoffs.py    Pareto front + constrained cost-based operating point
+  tradeoffs.py    policy sweep, Pareto filtering, constrained cost-based choice
   maturity.py     toy maturity rubric and scoring
   plots.py        figures
-run_demo.py       runs everything, writes results/
+run_demo.py       runs everything, writes results/ and docs/
+build_site.py     builds the report site in docs/ from results/metrics.json
 tests/            unit tests
 ```
 
