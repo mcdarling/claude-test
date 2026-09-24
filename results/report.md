@@ -94,74 +94,80 @@ rate 0.175 and deferral rate
 
 ![maturity](fig6_maturity.png)
 
+The **Kind** column says what sort of evidence each requirement rests on:
+- **Q**: Direct measurement: the number is the property, for a stated population
+- **P**: Proxy: a number that tracks the property but is not the property itself
+- **J**: Judgment or process check: a yes/no fact about what was done, or a human review
+- **F**: Formal proof: a mathematical guarantee that a stated specification holds
+
 ### Evidence: initial model
-| Characteristic | Level | Requirement | Evidence | Met |
-|---|---|---|---|---|
-| Reliability / validity (calibration) | L1 | Held-out accuracy reported | accuracy = 0.813 | ✅ |
-| Reliability / validity (calibration) | L2 | ECE <= 0.1 | ECE = 0.036 | ✅ |
-| Reliability / validity (calibration) | L3 | ECE <= 0.05 | ECE = 0.036 | ✅ |
-| Reliability / validity (calibration) | L3 | Uncertainty flags errors: AUROC >= 0.75 | AUROC = 0.804 | ✅ |
-| Reliability / validity (calibration) | L4 | Conformal coverage within 90% +/- 2% | coverage = 0.898 | ✅ |
-| Reliability / validity (calibration) | L4 | Drone-class coverage >= 88% | drone coverage = 0.957 | ✅ |
-| Reliability / validity (calibration) | L5 | Formal verification of components | not attempted | ❌ |
-| Robustness | L1 | Held-out accuracy reported | accuracy = 0.813 | ✅ |
-| Robustness | L2 | Every operational cell tested with >= 50 samples | 36 declared cells, min n = 124 | ✅ |
-| Robustness | L2 | Worst-cell accuracy >= 0.7 | night/severe/forest: 0.477 | ❌ |
-| Robustness | L3 | Uncertainty-guided scenario generation performed | 0 guided rounds | ❌ |
-| Robustness | L3 | Worst-cell accuracy 95% lower bound >= 0.7 | night/severe/forest: 0.406 | ❌ |
-| Robustness | L4 | Per-cell conformal coverage not significantly below target | all cells OK | ✅ |
-| Robustness | L4 | Runtime monitor defers <= 30% (ambiguous sets) | ambiguous-set rate = 0.201 | ✅ |
-| Robustness | L5 | Formal verification of components | not attempted | ❌ |
-| Safety (runtime guardrails) | L1 | Fixed decision threshold | P(drone) >= 0.5 | ✅ |
-| Safety (runtime guardrails) | L2 | Operating point chosen by explicit cost trade-off | t = 0.31, weights (miss, false alarm, defer) = (5.0, 1.0, 0.3) | ✅ |
-| Safety (runtime guardrails) | L3 | Uncertainty-triggered deferral: miss <= 5%, false alarm <= 10% at deferral <= 25% | miss = 0.032, false alarm = 0.191, deferral = 0.203 | ❌ |
-| Safety (runtime guardrails) | L4 | Drone-class conformal guarantee holds in every cell (miss-rate bound) | all cells OK | ✅ |
-| Safety (runtime guardrails) | L5 | Formally verified safety monitor | not attempted | ❌ |
+| Characteristic | Level | Requirement | Kind | Evidence | Met |
+|---|---|---|---|---|---|
+| Reliability / validity (calibration) | L1 | Held-out accuracy reported | Q | accuracy = 0.813 | ✅ |
+| Reliability / validity (calibration) | L2 | ECE <= 0.1 | Q | ECE = 0.036 | ✅ |
+| Reliability / validity (calibration) | L3 | ECE <= 0.05 | Q | ECE = 0.036 | ✅ |
+| Reliability / validity (calibration) | L3 | Uncertainty flags errors: AUROC >= 0.75 | Q | AUROC = 0.804 | ✅ |
+| Reliability / validity (calibration) | L4 | Conformal coverage within 90% +/- 2% | Q | coverage = 0.898 | ✅ |
+| Reliability / validity (calibration) | L4 | Drone-class coverage >= 88% | Q | drone coverage = 0.957 | ✅ |
+| Reliability / validity (calibration) | L5 | Formal verification of components | F | not attempted | ❌ |
+| Robustness | L1 | Held-out accuracy reported | Q | accuracy = 0.813 | ✅ |
+| Robustness | L2 | Every operational cell tested with >= 50 samples | P | 36 declared cells, min n = 124 | ✅ |
+| Robustness | L2 | Worst-cell accuracy >= 0.7 | Q | night/severe/forest: 0.477 | ❌ |
+| Robustness | L3 | Uncertainty-guided scenario generation performed | J | 0 guided rounds | ❌ |
+| Robustness | L3 | Worst-cell accuracy 95% lower bound >= 0.7 | Q | night/severe/forest: 0.406 | ❌ |
+| Robustness | L4 | Per-cell conformal coverage not significantly below target | Q | all cells OK | ✅ |
+| Robustness | L4 | Runtime monitor defers <= 30% (ambiguous sets) | Q | ambiguous-set rate = 0.201 | ✅ |
+| Robustness | L5 | Formal verification of components | F | not attempted | ❌ |
+| Safety (runtime guardrails) | L1 | Fixed decision threshold | J | P(drone) >= 0.5 | ✅ |
+| Safety (runtime guardrails) | L2 | Operating point chosen by explicit cost trade-off | J | t = 0.31, weights (miss, false alarm, defer) = (5.0, 1.0, 0.3) | ✅ |
+| Safety (runtime guardrails) | L3 | Uncertainty-triggered deferral: miss <= 5%, false alarm <= 10% at deferral <= 25% | Q | miss = 0.032, false alarm = 0.191, deferral = 0.203 | ❌ |
+| Safety (runtime guardrails) | L4 | Drone-class conformal guarantee holds in every cell (miss-rate bound) | Q | all cells OK | ✅ |
+| Safety (runtime guardrails) | L5 | Formally verified safety monitor | F | not attempted | ❌ |
 
 ### Evidence: after closed loop (full operational domain)
-| Characteristic | Level | Requirement | Evidence | Met |
-|---|---|---|---|---|
-| Reliability / validity (calibration) | L1 | Held-out accuracy reported | accuracy = 0.864 | ✅ |
-| Reliability / validity (calibration) | L2 | ECE <= 0.1 | ECE = 0.029 | ✅ |
-| Reliability / validity (calibration) | L3 | ECE <= 0.05 | ECE = 0.029 | ✅ |
-| Reliability / validity (calibration) | L3 | Uncertainty flags errors: AUROC >= 0.75 | AUROC = 0.824 | ✅ |
-| Reliability / validity (calibration) | L4 | Conformal coverage within 90% +/- 2% | coverage = 0.900 | ✅ |
-| Reliability / validity (calibration) | L4 | Drone-class coverage >= 88% | drone coverage = 0.868 | ❌ |
-| Reliability / validity (calibration) | L5 | Formal verification of components | not attempted | ❌ |
-| Robustness | L1 | Held-out accuracy reported | accuracy = 0.864 | ✅ |
-| Robustness | L2 | Every operational cell tested with >= 50 samples | 36 declared cells, min n = 124 | ✅ |
-| Robustness | L2 | Worst-cell accuracy >= 0.7 | dusk/severe/urban: 0.712 | ✅ |
-| Robustness | L3 | Uncertainty-guided scenario generation performed | 5 guided rounds | ✅ |
-| Robustness | L3 | Worst-cell accuracy 95% lower bound >= 0.7 | night/severe/urban: 0.646 | ❌ |
-| Robustness | L4 | Per-cell conformal coverage not significantly below target | all cells OK | ✅ |
-| Robustness | L4 | Runtime monitor defers <= 30% (ambiguous sets) | ambiguous-set rate = 0.146 | ✅ |
-| Robustness | L5 | Formal verification of components | not attempted | ❌ |
-| Safety (runtime guardrails) | L1 | Fixed decision threshold | P(drone) >= 0.5 | ✅ |
-| Safety (runtime guardrails) | L2 | Operating point chosen by explicit cost trade-off | t = 0.21, weights (miss, false alarm, defer) = (5.0, 1.0, 0.3) | ✅ |
-| Safety (runtime guardrails) | L3 | Uncertainty-triggered deferral: miss <= 5%, false alarm <= 10% at deferral <= 25% | miss = 0.046, false alarm = 0.144, deferral = 0.200 | ❌ |
-| Safety (runtime guardrails) | L4 | Drone-class conformal guarantee holds in every cell (miss-rate bound) | all cells OK | ✅ |
-| Safety (runtime guardrails) | L5 | Formally verified safety monitor | not attempted | ❌ |
+| Characteristic | Level | Requirement | Kind | Evidence | Met |
+|---|---|---|---|---|---|
+| Reliability / validity (calibration) | L1 | Held-out accuracy reported | Q | accuracy = 0.864 | ✅ |
+| Reliability / validity (calibration) | L2 | ECE <= 0.1 | Q | ECE = 0.029 | ✅ |
+| Reliability / validity (calibration) | L3 | ECE <= 0.05 | Q | ECE = 0.029 | ✅ |
+| Reliability / validity (calibration) | L3 | Uncertainty flags errors: AUROC >= 0.75 | Q | AUROC = 0.824 | ✅ |
+| Reliability / validity (calibration) | L4 | Conformal coverage within 90% +/- 2% | Q | coverage = 0.900 | ✅ |
+| Reliability / validity (calibration) | L4 | Drone-class coverage >= 88% | Q | drone coverage = 0.868 | ❌ |
+| Reliability / validity (calibration) | L5 | Formal verification of components | F | not attempted | ❌ |
+| Robustness | L1 | Held-out accuracy reported | Q | accuracy = 0.864 | ✅ |
+| Robustness | L2 | Every operational cell tested with >= 50 samples | P | 36 declared cells, min n = 124 | ✅ |
+| Robustness | L2 | Worst-cell accuracy >= 0.7 | Q | dusk/severe/urban: 0.712 | ✅ |
+| Robustness | L3 | Uncertainty-guided scenario generation performed | J | 5 guided rounds | ✅ |
+| Robustness | L3 | Worst-cell accuracy 95% lower bound >= 0.7 | Q | night/severe/urban: 0.646 | ❌ |
+| Robustness | L4 | Per-cell conformal coverage not significantly below target | Q | all cells OK | ✅ |
+| Robustness | L4 | Runtime monitor defers <= 30% (ambiguous sets) | Q | ambiguous-set rate = 0.146 | ✅ |
+| Robustness | L5 | Formal verification of components | F | not attempted | ❌ |
+| Safety (runtime guardrails) | L1 | Fixed decision threshold | J | P(drone) >= 0.5 | ✅ |
+| Safety (runtime guardrails) | L2 | Operating point chosen by explicit cost trade-off | J | t = 0.21, weights (miss, false alarm, defer) = (5.0, 1.0, 0.3) | ✅ |
+| Safety (runtime guardrails) | L3 | Uncertainty-triggered deferral: miss <= 5%, false alarm <= 10% at deferral <= 25% | Q | miss = 0.046, false alarm = 0.144, deferral = 0.200 | ❌ |
+| Safety (runtime guardrails) | L4 | Drone-class conformal guarantee holds in every cell (miss-rate bound) | Q | all cells OK | ✅ |
+| Safety (runtime guardrails) | L5 | Formally verified safety monitor | F | not attempted | ❌ |
 
 ### Evidence: after closed loop (restricted operational domain)
-| Characteristic | Level | Requirement | Evidence | Met |
-|---|---|---|---|---|
-| Reliability / validity (calibration) | L1 | Held-out accuracy reported | accuracy = 0.872 | ✅ |
-| Reliability / validity (calibration) | L2 | ECE <= 0.1 | ECE = 0.034 | ✅ |
-| Reliability / validity (calibration) | L3 | ECE <= 0.05 | ECE = 0.034 | ✅ |
-| Reliability / validity (calibration) | L3 | Uncertainty flags errors: AUROC >= 0.75 | AUROC = 0.830 | ✅ |
-| Reliability / validity (calibration) | L4 | Conformal coverage within 90% +/- 2% | coverage = 0.900 | ✅ |
-| Reliability / validity (calibration) | L4 | Drone-class coverage >= 88% | drone coverage = 0.868 | ❌ |
-| Reliability / validity (calibration) | L5 | Formal verification of components | not attempted | ❌ |
-| Robustness | L1 | Held-out accuracy reported | accuracy = 0.872 | ✅ |
-| Robustness | L2 | Every operational cell tested with >= 50 samples | 33 declared cells, min n = 124 | ✅ |
-| Robustness | L2 | Worst-cell accuracy >= 0.7 | night/severe/forest: 0.769 | ✅ |
-| Robustness | L3 | Uncertainty-guided scenario generation performed | 5 guided rounds | ✅ |
-| Robustness | L3 | Worst-cell accuracy 95% lower bound >= 0.7 | night/severe/forest: 0.703 | ✅ |
-| Robustness | L4 | Per-cell conformal coverage not significantly below target | all cells OK | ✅ |
-| Robustness | L4 | Runtime monitor defers <= 30% (ambiguous sets) | ambiguous-set rate = 0.123 | ✅ |
-| Robustness | L5 | Formal verification of components | not attempted | ❌ |
-| Safety (runtime guardrails) | L1 | Fixed decision threshold | P(drone) >= 0.5 | ✅ |
-| Safety (runtime guardrails) | L2 | Operating point chosen by explicit cost trade-off | t = 0.21, weights (miss, false alarm, defer) = (5.0, 1.0, 0.3) | ✅ |
-| Safety (runtime guardrails) | L3 | Uncertainty-triggered deferral: miss <= 5%, false alarm <= 10% at deferral <= 25% | miss = 0.042, false alarm = 0.175, deferral = 0.155 | ❌ |
-| Safety (runtime guardrails) | L4 | Drone-class conformal guarantee holds in every cell (miss-rate bound) | all cells OK | ✅ |
-| Safety (runtime guardrails) | L5 | Formally verified safety monitor | not attempted | ❌ |
+| Characteristic | Level | Requirement | Kind | Evidence | Met |
+|---|---|---|---|---|---|
+| Reliability / validity (calibration) | L1 | Held-out accuracy reported | Q | accuracy = 0.872 | ✅ |
+| Reliability / validity (calibration) | L2 | ECE <= 0.1 | Q | ECE = 0.034 | ✅ |
+| Reliability / validity (calibration) | L3 | ECE <= 0.05 | Q | ECE = 0.034 | ✅ |
+| Reliability / validity (calibration) | L3 | Uncertainty flags errors: AUROC >= 0.75 | Q | AUROC = 0.830 | ✅ |
+| Reliability / validity (calibration) | L4 | Conformal coverage within 90% +/- 2% | Q | coverage = 0.900 | ✅ |
+| Reliability / validity (calibration) | L4 | Drone-class coverage >= 88% | Q | drone coverage = 0.868 | ❌ |
+| Reliability / validity (calibration) | L5 | Formal verification of components | F | not attempted | ❌ |
+| Robustness | L1 | Held-out accuracy reported | Q | accuracy = 0.872 | ✅ |
+| Robustness | L2 | Every operational cell tested with >= 50 samples | P | 33 declared cells, min n = 124 | ✅ |
+| Robustness | L2 | Worst-cell accuracy >= 0.7 | Q | night/severe/forest: 0.769 | ✅ |
+| Robustness | L3 | Uncertainty-guided scenario generation performed | J | 5 guided rounds | ✅ |
+| Robustness | L3 | Worst-cell accuracy 95% lower bound >= 0.7 | Q | night/severe/forest: 0.703 | ✅ |
+| Robustness | L4 | Per-cell conformal coverage not significantly below target | Q | all cells OK | ✅ |
+| Robustness | L4 | Runtime monitor defers <= 30% (ambiguous sets) | Q | ambiguous-set rate = 0.123 | ✅ |
+| Robustness | L5 | Formal verification of components | F | not attempted | ❌ |
+| Safety (runtime guardrails) | L1 | Fixed decision threshold | J | P(drone) >= 0.5 | ✅ |
+| Safety (runtime guardrails) | L2 | Operating point chosen by explicit cost trade-off | J | t = 0.21, weights (miss, false alarm, defer) = (5.0, 1.0, 0.3) | ✅ |
+| Safety (runtime guardrails) | L3 | Uncertainty-triggered deferral: miss <= 5%, false alarm <= 10% at deferral <= 25% | Q | miss = 0.042, false alarm = 0.175, deferral = 0.155 | ❌ |
+| Safety (runtime guardrails) | L4 | Drone-class conformal guarantee holds in every cell (miss-rate bound) | Q | all cells OK | ✅ |
+| Safety (runtime guardrails) | L5 | Formally verified safety monitor | F | not attempted | ❌ |

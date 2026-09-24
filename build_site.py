@@ -12,7 +12,7 @@ import shutil
 from pathlib import Path
 
 from uq_certification import simulator as sim
-from uq_certification.maturity import LEVEL_NAMES
+from uq_certification.maturity import EVIDENCE_KINDS, LEVEL_NAMES
 
 ROOT = Path(__file__).parent
 FIGURES = [
@@ -82,14 +82,34 @@ def verdict_table(cards) -> str:
     return f'<div class="scroll"><table class="verdict"><thead><tr><th></th>{head}</tr></thead><tbody>{"".join(rows)}</tbody></table></div>'
 
 
+KIND_NAMES = {"Q": "Direct measurement", "P": "Proxy", "J": "Judgment or process check", "F": "Formal proof"}
+
+
+def kind_badge(kind: str) -> str:
+    return f'<abbr class="kind k-{kind}" title="{esc(KIND_NAMES[kind])}">{kind}</abbr>'
+
+
+def kinds_legend(cards) -> str:
+    counts = {k: 0 for k in EVIDENCE_KINDS}
+    for assessment in cards[CONFIGS[0][0]]:
+        for c in assessment["criteria"]:
+            counts[c["kind"]] += 1
+    items = "".join(
+        f"<div><dt>{kind_badge(k)} {esc(KIND_NAMES[k])}</dt><dd>{esc(EVIDENCE_KINDS[k].split(': ', 1)[1].capitalize())}. "
+        f"<span class=\"count\">{counts[k]} in this rubric</span></dd></div>"
+        for k in EVIDENCE_KINDS
+    )
+    return f'<dl class="kinds">{items}</dl>'
+
+
 def rubric_blocks(cards) -> str:
     blocks = []
     for assessment in cards[CONFIGS[0][0]]:
         char = assessment["characteristic"]
         items = []
         for level in range(1, 6):
-            reqs = [c["requirement"] for c in assessment["criteria"] if c["level"] == level]
-            lis = "".join(f"<li>{esc(r)}</li>" for r in reqs)
+            reqs = [c for c in assessment["criteria"] if c["level"] == level]
+            lis = "".join(f"<li>{kind_badge(c['kind'])}{esc(c['requirement'])}</li>" for c in reqs)
             items.append(f'<li><span class="tag">L{level}</span><ul>{lis}</ul></li>')
         blocks.append(
             f'<section class="rubric"><h4>{esc(SHORT_NAMES[char])}</h4>'
@@ -114,7 +134,7 @@ def evidence_tables(cards) -> str:
                 mark = '<span class="pass">Met</span>' if c["passed"] else '<span class="fail">Not met</span>'
                 cells.append(f"<td>{mark}<span class=\"ev\">{esc(c['evidence'])}</span></td>")
             rows.append(
-                f'<tr><td class="lvcell">L{crit["level"]}</td><th scope="row">{esc(crit["requirement"])}</th>{"".join(cells)}</tr>'
+                f'<tr><td class="lvcell">L{crit["level"]}</td><th scope="row">{kind_badge(crit["kind"])}{esc(crit["requirement"])}</th>{"".join(cells)}</tr>'
             )
         out.append(
             f'<h4 id="evidence-{SHORT_NAMES[char].lower()}">{esc(SHORT_NAMES[char])}</h4>'
@@ -321,6 +341,18 @@ table.verdict td {{ white-space: nowrap; vertical-align: middle; }}
 .reqs > li {{ display: grid; grid-template-columns: 2.4rem 1fr; gap: 0.5rem; padding: 0.55rem 0; border-top: 1px solid var(--rule); font-size: 0.93rem; line-height: 1.45; }}
 .reqs ul {{ margin: 0; padding-left: 1rem; display: grid; gap: 0.25rem; }}
 .tag {{ font: 600 0.95rem/1.4 var(--display); color: var(--accent); }}
+.reqs ul {{ list-style: none; padding-left: 0; }}
+abbr.kind {{ display: inline-block; font: 500 0.7rem/1.25 var(--mono); color: var(--muted); border: 1px solid var(--muted); border-radius: 3px; padding: 0 0.3rem; margin-right: 0.45rem; text-decoration: none; cursor: help; vertical-align: 0.08em; }}
+abbr.kind.k-Q {{ color: var(--accent); border-color: var(--accent); }}
+abbr.kind.k-J {{ border-style: dashed; }}
+dl.kinds {{ display: grid; gap: 0.8rem 1.4rem; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin: 0; max-width: 980px; }}
+dl.kinds > div {{ display: grid; gap: 0.25rem; align-content: start; }}
+dl.kinds dt {{ font: 600 1.05rem/1.3 var(--display); }}
+dl.kinds dd {{ margin: 0; font-size: 0.93rem; color: var(--muted); }}
+dl.kinds .count {{ display: block; font: 400 0.78rem/1.4 var(--mono); margin-top: 0.2rem; }}
+table.nist {{ min-width: 820px; background: var(--sheet); }}
+table.nist tbody th {{ font: 600 1rem/1.3 var(--display); width: 16%; }}
+table.nist td {{ font-size: 0.9rem; line-height: 1.45; }}
 table.evidence {{ min-width: 860px; background: var(--sheet); }}
 table.evidence tbody th {{ font: 400 0.93rem/1.4 var(--body); width: 30%; }}
 table.evidence td.lvcell {{ font: 600 1rem/1.4 var(--display); color: var(--accent); width: 3.2rem; }}
@@ -360,6 +392,7 @@ footer {{ font-size: 0.9rem; color: var(--muted); border-top: 1px solid var(--ru
     <li><a href="#measure">How we measured</a></li>
     <li><a href="#scores">Scores and evidence</a></li>
     <li><a href="#lessons">What we learned</a></li>
+    <li><a href="#beyond">Beyond uncertainty</a></li>
     <li><a href="#glossary">Glossary</a></li>
   </ol>
 </nav>
@@ -446,7 +479,10 @@ footer {{ font-size: 0.9rem; color: var(--muted); border-top: 1px solid var(--ru
     <p>This assessment uses <strong>uncertainty quantification</strong> as its mechanism: measuring how sure the AI is about each decision, and whether that
     sureness can be trusted. Below is the rubric we scored against: three characteristics, each with requirements at every level. The numeric thresholds
     are ours, chosen for illustration.</p>
+    <p>Each requirement is tagged with the kind of evidence it rests on. The difference matters: a direct measurement says something about the system,
+    while a process check only says that a step was carried out.</p>
   </div>
+  {kinds_legend(cards)}
   {rubric_blocks(cards)}
   <p class="note">One rubric change was made after seeing results. The first run passed Safety levels 3 and 4 with a system that raised false alarms on 69%
   of empty scenes. That is a loophole, not a safe system, so we added the false-alarm limit to Safety level 3. Every other threshold was set before
@@ -577,8 +613,57 @@ footer {{ font-size: 0.9rem; color: var(--muted); border-top: 1px solid var(--ru
       <li><strong>Trade-offs need constraints as well as weights.</strong> Weights alone produced extreme settings. A hard cap on operator workload,
       the kind of limit requirements already state, produced a sensible one.</li>
     </ul>
-    <p>Uncertainty is one mechanism among many. A full scheme would add others for the remaining NIST characteristics, such as test-coverage metrics,
-    adversarial robustness checks, drift detection in the field and formal verification for level 5.</p>
+    <p>Uncertainty is one mechanism among many. The next section looks at what a full scheme could use for every NIST characteristic.</p>
+  </div>
+</section>
+
+<section class="part" id="beyond">
+  <header><p class="eyebrow">Section 7</p><h2>Beyond uncertainty: evidence for every characteristic</h2></header>
+  <div class="prose">
+    <p>This assessment covered three of NIST's seven characteristics with one mechanism. A complete scheme needs evidence for all seven, and the kinds of
+    evidence available differ a lot between them. Some characteristics can reach formal guarantees; others rest mostly on proxies and structured
+    judgment.</p>
+  </div>
+  <div class="scroll"><table class="nist">
+    <thead><tr><th>Characteristic</th><th>{kind_badge("Q")}Direct measurement</th><th>{kind_badge("P")}Proxy</th><th>{kind_badge("J")}Judgment</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Valid and reliable</th><td>Accuracy, miss and false-alarm rates on a representative test set; calibration error; conformal coverage; per-condition accuracy with confidence bounds</td><td>Test-coverage metrics (share of condition combinations tested); gap between synthetic and real-world performance</td><td>Expert review of whether the test data represents real operations</td></tr>
+      <tr><th scope="row">Safe</th><td>Failure-rate upper bounds from failure-free trials; safety margins such as minimum separation; runtime monitor trip and fallback-success rates. {kind_badge("F")}Formal verification of specified properties</td><td>Rare-event simulation and adversarial scenario search, which find failures but only among scenarios someone thought to search</td><td>Hazard analysis completeness and mitigation review</td></tr>
+      <tr><th scope="row">Secure and resilient</th><td>Performance as sensors fail or are jammed; recovery time. {kind_badge("F")}Certified robustness radius, for small input changes only</td><td>Attack success rate under a stated threat model; backdoor and poisoning scans</td><td>Red-team findings; supply-chain and provenance review</td></tr>
+      <tr><th scope="row">Accountable and transparent</th><td>Log completeness; whether a past decision can be reproduced</td><td>Traceability coverage: share of requirements linked to tests and results</td><td>Model cards and datasheets exist and are complete; clear ownership and incident response</td></tr>
+      <tr><th scope="row">Explainable and interpretable</th><td>Operator task performance with and without explanations</td><td>Explanation faithfulness (removing the highlighted inputs changes the output); explanation stability</td><td>Operator interviews and usability studies</td></tr>
+      <tr><th scope="row">Privacy-enhanced</th><td>{kind_badge("F")}Differential privacy budget (ε), a formal guarantee about the training process</td><td>Membership-inference attack success</td><td>Data-minimization and retention review</td></tr>
+      <tr><th scope="row">Fair, with harmful bias managed</th><td>Performance gaps across groups with confidence intervals, once a fairness definition is chosen</td><td>–</td><td>Stakeholder review of which groups and which definition matter</td></tr>
+    </tbody>
+  </table></div>
+  <div class="prose">
+    <h3>What can't be measured directly</h3>
+    <ul>
+      <li><strong>Absence.</strong> Testing can reveal failures and vulnerabilities but never prove there are none. The best available is a bound: after
+      <em>n</em> representative trials with no failures, the failure rate is below about 3/<em>n</em> with 95% confidence. Claiming fewer than 1 failure
+      in 10,000 takes about 30,000 failure-free trials.</li>
+      <li><strong>The future.</strong> New attacks, unforeseen conditions and drift that hasn't happened yet. Security evidence only covers the threats that
+      were modeled.</li>
+      <li><strong>Contested definitions.</strong> Common fairness definitions can't all hold at once when groups differ in base rates, so someone has to
+      choose. How much transparency is enough depends on the audience.</li>
+      <li><strong>Organizational properties.</strong> Accountability belongs to people and processes. Documents and logs can be checked; whether people will
+      act on them can't.</li>
+      <li><strong>What people think.</strong> Trust and understanding show only through behavior or surveys. Trust calibration (whether reliance matches
+      reliability) can be measured; trust itself can't.</li>
+      <li><strong>Whether the specification is right.</strong> A proof shows a system meets its specification. Whether that specification captures what
+      "safe" means is a judgment.</li>
+    </ul>
+    <p>These gaps are usually handled with an <strong>assurance case</strong>: a structured argument linking each claim to the evidence behind it,
+    with assumptions and remaining risks written down.</p>
+    <h3>What this means for maturity levels</h3>
+    <ul>
+      <li><strong>Characteristics don't top out at the same level.</strong> Reliability and privacy can reach formal guarantees; accountability and
+      explainability may not get past proxies and judgment. Level 4 in one is not automatically comparable to level 4 in another.</li>
+      <li><strong>Each level should say what kind of evidence it accepts.</strong> For example: judgment at levels 1–2, proxies at level 3, direct
+      measurement with statistical guarantees at level 4, proofs of a stated specification at level 5.</li>
+      <li><strong>Each level should state its residual risk.</strong> A score that covers threat model X should say that unknown attacks are not
+      addressed, instead of implying the number covers everything.</li>
+    </ul>
   </div>
 </section>
 

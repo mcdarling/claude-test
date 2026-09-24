@@ -43,12 +43,22 @@ MISS_L3, FALSE_ALARM_L3, DEFER_L3 = 0.05, 0.10, 0.25
 SIGNIFICANCE = 0.05
 
 
+# Kinds of evidence a criterion rests on.
+EVIDENCE_KINDS = {
+    "Q": "Direct measurement: the number is the property, for a stated population",
+    "P": "Proxy: a number that tracks the property but is not the property itself",
+    "J": "Judgment or process check: a yes/no fact about what was done, or a human review",
+    "F": "Formal proof: a mathematical guarantee that a stated specification holds",
+}
+
+
 @dataclass
 class Criterion:
     level: int
     requirement: str
     passed: bool
     evidence: str
+    kind: str = "Q"  # key of EVIDENCE_KINDS
 
 
 @dataclass
@@ -114,7 +124,7 @@ def assess(ev: dict) -> list[Assessment]:
                 drone_hit.mean() >= TARGET_COVERAGE - COVERAGE_TOL,
                 f"drone coverage = {drone_hit.mean():.3f}",
             ),
-            Criterion(5, "Formal verification of components", False, "not attempted"),
+            Criterion(5, "Formal verification of components", False, "not attempted", kind="F"),
         ],
     )
 
@@ -140,6 +150,7 @@ def assess(ev: dict) -> list[Assessment]:
                 f"Every operational cell tested with >= {MIN_CELL_SAMPLES} samples",
                 bool(counts[declared].min() >= MIN_CELL_SAMPLES),
                 f"{len(declared)} declared cells, min n = {counts[declared].min()}",
+                kind="P",
             ),
             Criterion(
                 2,
@@ -152,6 +163,7 @@ def assess(ev: dict) -> list[Assessment]:
                 "Uncertainty-guided scenario generation performed",
                 ev["guided_rounds"] > 0,
                 f"{ev['guided_rounds']} guided rounds",
+                kind="J",
             ),
             Criterion(
                 3,
@@ -171,7 +183,7 @@ def assess(ev: dict) -> list[Assessment]:
                 set_defer <= MAX_SET_DEFERRAL,
                 f"ambiguous-set rate = {set_defer:.3f}",
             ),
-            Criterion(5, "Formal verification of components", False, "not attempted"),
+            Criterion(5, "Formal verification of components", False, "not attempted", kind="F"),
         ],
     )
 
@@ -184,12 +196,13 @@ def assess(ev: dict) -> list[Assessment]:
     safety = Assessment(
         "Safety (runtime guardrails)",
         [
-            Criterion(1, "Fixed decision threshold", True, "P(drone) >= 0.5"),
+            Criterion(1, "Fixed decision threshold", True, "P(drone) >= 0.5", kind="J"),
             Criterion(
                 2,
                 "Operating point chosen by explicit cost trade-off",
                 ev["policy"] is not None,
                 f"t = {ev['policy'].t:.2f}, weights (miss, false alarm, defer) = {ev['weights']}",
+                kind="J",
             ),
             Criterion(
                 3,
@@ -210,7 +223,7 @@ def assess(ev: dict) -> list[Assessment]:
                 if not drone_under
                 else "failing: " + ", ".join(sim.cell_label(c) for c in drone_under),
             ),
-            Criterion(5, "Formally verified safety monitor", False, "not attempted"),
+            Criterion(5, "Formally verified safety monitor", False, "not attempted", kind="F"),
         ],
     )
     return [reliability, robustness, safety]
