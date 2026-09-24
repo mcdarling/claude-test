@@ -148,11 +148,11 @@
     }
   },
   "uncertainty_importance": {
-    "size_m": 0.053962420567528736,
+    "size_m": 0.05396242056752878,
     "range_km": 0.18313237081693703,
-    "lighting": 0.08879238204685833,
-    "weather": 0.16301310538340796,
-    "terrain": 0.00674117434797219,
+    "lighting": 0.08879238204685835,
+    "weather": 0.1630131053834079,
+    "terrain": 0.006741174347972212,
     "bird": 0.020458961265140064
   },
   "maturity_levels": {
@@ -227,42 +227,49 @@
           {
             "level": 1,
             "requirement": "Held-out accuracy reported",
+            "kind": "Q",
             "passed": true,
             "evidence": "accuracy = 0.813"
           },
           {
             "level": 2,
             "requirement": "ECE <= 0.1",
+            "kind": "Q",
             "passed": true,
             "evidence": "ECE = 0.036"
           },
           {
             "level": 3,
             "requirement": "ECE <= 0.05",
+            "kind": "Q",
             "passed": true,
             "evidence": "ECE = 0.036"
           },
           {
             "level": 3,
             "requirement": "Uncertainty flags errors: AUROC >= 0.75",
+            "kind": "Q",
             "passed": true,
             "evidence": "AUROC = 0.804"
           },
           {
             "level": 4,
             "requirement": "Conformal coverage within 90% +/- 2%",
+            "kind": "Q",
             "passed": true,
             "evidence": "coverage = 0.898"
           },
           {
             "level": 4,
             "requirement": "Drone-class coverage >= 88%",
+            "kind": "Q",
             "passed": true,
             "evidence": "drone coverage = 0.957"
           },
           {
             "level": 5,
             "requirement": "Formal verification of components",
+            "kind": "F",
             "passed": false,
             "evidence": "not attempted"
           }
@@ -275,48 +282,56 @@
           {
             "level": 1,
             "requirement": "Held-out accuracy reported",
+            "kind": "Q",
             "passed": true,
             "evidence": "accuracy = 0.813"
           },
           {
             "level": 2,
             "requirement": "Every operational cell tested with >= 50 samples",
+            "kind": "P",
             "passed": true,
             "evidence": "36 declared cells, min n = 124"
           },
           {
             "level": 2,
             "requirement": "Worst-cell accuracy >= 0.7",
+            "kind": "Q",
             "passed": false,
             "evidence": "night/severe/forest: 0.477"
           },
           {
             "level": 3,
             "requirement": "Uncertainty-guided scenario generation performed",
+            "kind": "J",
             "passed": false,
             "evidence": "0 guided rounds"
           },
           {
             "level": 3,
             "requirement": "Worst-cell accuracy 95% lower bound >= 0.7",
+            "kind": "Q",
             "passed": false,
             "evidence": "night/severe/forest: 0.406"
           },
           {
             "level": 4,
             "requirement": "Per-cell conformal coverage not significantly below target",
+            "kind": "Q",
             "passed": true,
             "evidence": "all cells OK"
           },
           {
             "level": 4,
             "requirement": "Runtime monitor defers <= 30% (ambiguous sets)",
+            "kind": "Q",
             "passed": true,
             "evidence": "ambiguous-set rate = 0.201"
           },
           {
             "level": 5,
             "requirement": "Formal verification of components",
+            "kind": "F",
             "passed": false,
             "evidence": "not attempted"
           }
@@ -329,30 +344,35 @@
           {
             "level": 1,
             "requirement": "Fixed decision threshold",
+            "kind": "J",
             "passed": true,
             "evidence": "P(drone) >= 0.5"
           },
           {
             "level": 2,
             "requirement": "Operating point chosen by explicit cost trade-off",
+            "kind": "J",
             "passed": true,
             "evidence": "t = 0.31, weights (miss, false alarm, defer) = (5.0, 1.0, 0.3)"
           },
           {
             "level": 3,
             "requirement": "Uncertainty-triggered deferral: miss <= 5%, false alarm <= 10% at deferral <= 25%",
+            "kind": "Q",
             "passed": false,
             "evidence": "miss = 0.032, false alarm = 0.191, deferral = 0.203"
           },
           {
             "level": 4,
             "requirement": "Drone-class conformal guarantee holds in every cell (miss-rate bound)",
+            "kind": "Q",
             "passed": true,
             "evidence": "all cells OK"
           },
           {
             "level": 5,
             "requirement": "Formally verified safety monitor",
+            "kind": "F",
             "passed": false,
             "evidence": "not attempted"
           }
@@ -367,42 +387,49 @@
           {
             "level": 1,
             "requirement": "Held-out accuracy reported",
+            "kind": "Q",
             "passed": true,
             "evidence": "accuracy = 0.864"
           },
           {
             "level": 2,
             "requirement": "ECE <= 0.1",
+            "kind": "Q",
             "passed": true,
             "evidence": "ECE = 0.029"
           },
           {
             "level": 3,
             "requirement": "ECE <= 0.05",
+            "kind": "Q",
             "passed": true,
             "evidence": "ECE = 0.029"
           },
           {
             "level": 3,
             "requirement": "Uncertainty flags errors: AUROC >= 0.75",
+            "kind": "Q",
             "passed": true,
             "evidence": "AUROC = 0.824"
           },
           {
             "level": 4,
             "requirement": "Conformal coverage within 90% +/- 2%",
+            "kind": "Q",
             "passed": true,
             "evidence": "coverage = 0.900"
           },
           {
             "level": 4,
             "requirement": "Drone-class coverage >= 88%",
+            "kind": "Q",
             "passed": false,
             "evidence": "drone coverage = 0.868"
           },
           {
             "level": 5,
             "requirement": "Formal verification of components",
+            "kind": "F",
             "passed": false,
             "evidence": "not attempted"
           }
@@ -415,48 +442,56 @@
           {
             "level": 1,
             "requirement": "Held-out accuracy reported",
+            "kind": "Q",
             "passed": true,
             "evidence": "accuracy = 0.864"
           },
           {
             "level": 2,
             "requirement": "Every operational cell tested with >= 50 samples",
+            "kind": "P",
             "passed": true,
             "evidence": "36 declared cells, min n = 124"
           },
           {
             "level": 2,
             "requirement": "Worst-cell accuracy >= 0.7",
+            "kind": "Q",
             "passed": true,
             "evidence": "dusk/severe/urban: 0.712"
           },
           {
             "level": 3,
             "requirement": "Uncertainty-guided scenario generation performed",
+            "kind": "J",
             "passed": true,
             "evidence": "5 guided rounds"
           },
           {
             "level": 3,
             "requirement": "Worst-cell accuracy 95% lower bound >= 0.7",
+            "kind": "Q",
             "passed": false,
             "evidence": "night/severe/urban: 0.646"
           },
           {
             "level": 4,
             "requirement": "Per-cell conformal coverage not significantly below target",
+            "kind": "Q",
             "passed": true,
             "evidence": "all cells OK"
           },
           {
             "level": 4,
             "requirement": "Runtime monitor defers <= 30% (ambiguous sets)",
+            "kind": "Q",
             "passed": true,
             "evidence": "ambiguous-set rate = 0.146"
           },
           {
             "level": 5,
             "requirement": "Formal verification of components",
+            "kind": "F",
             "passed": false,
             "evidence": "not attempted"
           }
@@ -469,30 +504,35 @@
           {
             "level": 1,
             "requirement": "Fixed decision threshold",
+            "kind": "J",
             "passed": true,
             "evidence": "P(drone) >= 0.5"
           },
           {
             "level": 2,
             "requirement": "Operating point chosen by explicit cost trade-off",
+            "kind": "J",
             "passed": true,
             "evidence": "t = 0.21, weights (miss, false alarm, defer) = (5.0, 1.0, 0.3)"
           },
           {
             "level": 3,
             "requirement": "Uncertainty-triggered deferral: miss <= 5%, false alarm <= 10% at deferral <= 25%",
+            "kind": "Q",
             "passed": false,
             "evidence": "miss = 0.046, false alarm = 0.144, deferral = 0.200"
           },
           {
             "level": 4,
             "requirement": "Drone-class conformal guarantee holds in every cell (miss-rate bound)",
+            "kind": "Q",
             "passed": true,
             "evidence": "all cells OK"
           },
           {
             "level": 5,
             "requirement": "Formally verified safety monitor",
+            "kind": "F",
             "passed": false,
             "evidence": "not attempted"
           }
@@ -507,42 +547,49 @@
           {
             "level": 1,
             "requirement": "Held-out accuracy reported",
+            "kind": "Q",
             "passed": true,
             "evidence": "accuracy = 0.872"
           },
           {
             "level": 2,
             "requirement": "ECE <= 0.1",
+            "kind": "Q",
             "passed": true,
             "evidence": "ECE = 0.034"
           },
           {
             "level": 3,
             "requirement": "ECE <= 0.05",
+            "kind": "Q",
             "passed": true,
             "evidence": "ECE = 0.034"
           },
           {
             "level": 3,
             "requirement": "Uncertainty flags errors: AUROC >= 0.75",
+            "kind": "Q",
             "passed": true,
             "evidence": "AUROC = 0.830"
           },
           {
             "level": 4,
             "requirement": "Conformal coverage within 90% +/- 2%",
+            "kind": "Q",
             "passed": true,
             "evidence": "coverage = 0.900"
           },
           {
             "level": 4,
             "requirement": "Drone-class coverage >= 88%",
+            "kind": "Q",
             "passed": false,
             "evidence": "drone coverage = 0.868"
           },
           {
             "level": 5,
             "requirement": "Formal verification of components",
+            "kind": "F",
             "passed": false,
             "evidence": "not attempted"
           }
@@ -555,48 +602,56 @@
           {
             "level": 1,
             "requirement": "Held-out accuracy reported",
+            "kind": "Q",
             "passed": true,
             "evidence": "accuracy = 0.872"
           },
           {
             "level": 2,
             "requirement": "Every operational cell tested with >= 50 samples",
+            "kind": "P",
             "passed": true,
             "evidence": "33 declared cells, min n = 124"
           },
           {
             "level": 2,
             "requirement": "Worst-cell accuracy >= 0.7",
+            "kind": "Q",
             "passed": true,
             "evidence": "night/severe/forest: 0.769"
           },
           {
             "level": 3,
             "requirement": "Uncertainty-guided scenario generation performed",
+            "kind": "J",
             "passed": true,
             "evidence": "5 guided rounds"
           },
           {
             "level": 3,
             "requirement": "Worst-cell accuracy 95% lower bound >= 0.7",
+            "kind": "Q",
             "passed": true,
             "evidence": "night/severe/forest: 0.703"
           },
           {
             "level": 4,
             "requirement": "Per-cell conformal coverage not significantly below target",
+            "kind": "Q",
             "passed": true,
             "evidence": "all cells OK"
           },
           {
             "level": 4,
             "requirement": "Runtime monitor defers <= 30% (ambiguous sets)",
+            "kind": "Q",
             "passed": true,
             "evidence": "ambiguous-set rate = 0.123"
           },
           {
             "level": 5,
             "requirement": "Formal verification of components",
+            "kind": "F",
             "passed": false,
             "evidence": "not attempted"
           }
@@ -609,30 +664,35 @@
           {
             "level": 1,
             "requirement": "Fixed decision threshold",
+            "kind": "J",
             "passed": true,
             "evidence": "P(drone) >= 0.5"
           },
           {
             "level": 2,
             "requirement": "Operating point chosen by explicit cost trade-off",
+            "kind": "J",
             "passed": true,
             "evidence": "t = 0.21, weights (miss, false alarm, defer) = (5.0, 1.0, 0.3)"
           },
           {
             "level": 3,
             "requirement": "Uncertainty-triggered deferral: miss <= 5%, false alarm <= 10% at deferral <= 25%",
+            "kind": "Q",
             "passed": false,
             "evidence": "miss = 0.042, false alarm = 0.175, deferral = 0.155"
           },
           {
             "level": 4,
             "requirement": "Drone-class conformal guarantee holds in every cell (miss-rate bound)",
+            "kind": "Q",
             "passed": true,
             "evidence": "all cells OK"
           },
           {
             "level": 5,
             "requirement": "Formally verified safety monitor",
+            "kind": "F",
             "passed": false,
             "evidence": "not attempted"
           }

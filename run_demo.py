@@ -20,7 +20,7 @@ from uq_certification import plots
 from uq_certification import simulator as sim
 from uq_certification.closed_loop import run_closed_loop
 from uq_certification.conformal import ConformalDetector, coverage
-from uq_certification.maturity import LEVEL_NAMES, TARGET_COVERAGE, assess
+from uq_certification.maturity import EVIDENCE_KINDS, LEVEL_NAMES, TARGET_COVERAGE, assess
 from uq_certification.measures import (
     error_by_uncertainty_quantile,
     error_detection_auroc,
@@ -232,7 +232,13 @@ def _assessment_dict(a):
         "characteristic": a.characteristic,
         "level": a.level,
         "criteria": [
-            {"level": c.level, "requirement": c.requirement, "passed": bool(c.passed), "evidence": c.evidence}
+            {
+                "level": c.level,
+                "requirement": c.requirement,
+                "kind": c.kind,
+                "passed": bool(c.passed),
+                "evidence": c.evidence,
+            }
             for c in a.criteria
         ],
     }
@@ -243,11 +249,12 @@ def _mean_sd(values):
 
 
 def _scorecard_table(assessments):
-    lines = ["| Characteristic | Level | Requirement | Evidence | Met |", "|---|---|---|---|---|"]
+    lines = ["| Characteristic | Level | Requirement | Kind | Evidence | Met |", "|---|---|---|---|---|---|"]
     for a in assessments:
         for c in a.criteria:
             lines.append(
-                f"| {a.characteristic} | L{c.level} | {c.requirement} | {c.evidence} | {'✅' if c.passed else '❌'} |"
+                f"| {a.characteristic} | L{c.level} | {c.requirement} | {c.kind} | {c.evidence} "
+                f"| {'✅' if c.passed else '❌'} |"
             )
     return "\n".join(lines)
 
@@ -293,6 +300,7 @@ def write_report(args, metrics, scorecards, scorecards_restricted, restricted_ev
     )
     excluded = metrics["restricted_od_excluded_cells"]
     rr = metrics["model_restricted_od"]
+    kinds_legend = "\n".join(f"- **{k}**: {v}" for k, v in EVIDENCE_KINDS.items())
 
     report = f"""# Results: UQ as a measurement mechanism for maturity-based certification
 
@@ -376,6 +384,9 @@ rate {rr['policy_rates']['false_alarm']:.3f} and deferral rate
 {level_rows}
 
 ![maturity](fig6_maturity.png)
+
+The **Kind** column says what sort of evidence each requirement rests on:
+{kinds_legend}
 
 ### Evidence: initial model
 {_scorecard_table(scorecards['initial'])}
