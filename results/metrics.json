@@ -1,0 +1,648 @@
+{
+  "closed_loop_final_round": {
+    "uncertainty": {
+      "n_train": {
+        "mean": 3500.0,
+        "sd": 0.0
+      },
+      "accuracy": {
+        "mean": 0.86395,
+        "sd": 0.0048936182932468346
+      },
+      "worst_cell_accuracy": {
+        "mean": 0.7081235697940503,
+        "sd": 0.008157365653603534
+      },
+      "ece": {
+        "mean": 0.018300000792689845,
+        "sd": 0.007807857896421251
+      },
+      "mean_epistemic": {
+        "mean": 0.02631023237811242,
+        "sd": 0.013306350707021068
+      },
+      "mean_aleatoric": {
+        "mean": 0.4509469049226101,
+        "sd": 0.045218177889652315
+      }
+    },
+    "random": {
+      "n_train": {
+        "mean": 3500.0,
+        "sd": 0.0
+      },
+      "accuracy": {
+        "mean": 0.861175,
+        "sd": 0.002070024154448433
+      },
+      "worst_cell_accuracy": {
+        "mean": 0.6942334096109839,
+        "sd": 0.006305936166910304
+      },
+      "ece": {
+        "mean": 0.017877541845800943,
+        "sd": 0.011452030872141092
+      },
+      "mean_epistemic": {
+        "mean": 0.016959213573224864,
+        "sd": 0.008739229065671004
+      },
+      "mean_aleatoric": {
+        "mean": 0.4539946970284606,
+        "sd": 0.05490051674811406
+      }
+    }
+  },
+  "closed_loop_initial_round": {
+    "n_train": {
+      "mean": 1500.0,
+      "sd": 0.0
+    },
+    "accuracy": {
+      "mean": 0.83925,
+      "sd": 0.013445026961668763
+    },
+    "worst_cell_accuracy": {
+      "mean": 0.6261641562099228,
+      "sd": 0.07686716294164307
+    },
+    "ece": {
+      "mean": 0.02765539140503881,
+      "sd": 0.009835106725704834
+    },
+    "mean_epistemic": {
+      "mean": 0.052363919331185206,
+      "sd": 0.019318558814301737
+    },
+    "mean_aleatoric": {
+      "mean": 0.464643303245576,
+      "sd": 0.0704458109009476
+    }
+  },
+  "models": {
+    "initial": {
+      "accuracy": 0.813125,
+      "ece": 0.03615116039037054,
+      "error_auroc_total": 0.8040046375440554,
+      "error_auroc_epistemic": 0.6783062167254928,
+      "mean_epistemic": 0.08129553637340146,
+      "mean_aleatoric": 0.5697043127246636,
+      "conformal_coverage_marginal": 0.898,
+      "conformal_coverage_mondrian": 0.911125,
+      "conformal_drone_coverage_mondrian": 0.9154504277805737,
+      "ambiguous_set_rate_mondrian": 0.200625,
+      "error_by_uncertainty_decile": [
+        0.005,
+        0.01375,
+        0.0325,
+        0.07,
+        0.1,
+        0.1775,
+        0.23625,
+        0.3375,
+        0.40875,
+        0.4875
+      ],
+      "policy": {
+        "t": 0.30800000000000005,
+        "tau": 0.9314503279495916
+      },
+      "policy_rates": {
+        "miss": 0.03220936084549572,
+        "false_alarm": 0.19076005961251863,
+        "deferral": 0.2025
+      }
+    },
+    "after closed loop": {
+      "accuracy": 0.863625,
+      "ece": 0.02912021650936915,
+      "error_auroc_total": 0.8242315745651967,
+      "error_auroc_epistemic": 0.5300773350664837,
+      "mean_epistemic": 0.03170159147284216,
+      "mean_aleatoric": 0.508209635123518,
+      "conformal_coverage_marginal": 0.900375,
+      "conformal_coverage_mondrian": 0.914,
+      "conformal_drone_coverage_mondrian": 0.9134373427277303,
+      "ambiguous_set_rate_mondrian": 0.145875,
+      "error_by_uncertainty_decile": [
+        0.00125,
+        0.00625,
+        0.01625,
+        0.03625,
+        0.06375,
+        0.10125,
+        0.1475,
+        0.22125,
+        0.345,
+        0.425
+      ],
+      "policy": {
+        "t": 0.212,
+        "tau": 0.8818087540496292
+      },
+      "policy_rates": {
+        "miss": 0.045546049320583794,
+        "false_alarm": 0.14431197218082464,
+        "deferral": 0.199625
+      }
+    }
+  },
+  "uncertainty_importance": {
+    "size_m": 0.053962420567528736,
+    "range_km": 0.18313237081693703,
+    "lighting": 0.08879238204685833,
+    "weather": 0.16301310538340796,
+    "terrain": 0.00674117434797219,
+    "bird": 0.020458961265140064
+  },
+  "maturity_levels": {
+    "initial": {
+      "Reliability / validity (calibration)": 4,
+      "Robustness": 1,
+      "Safety (runtime guardrails)": 2
+    },
+    "after closed loop": {
+      "Reliability / validity (calibration)": 3,
+      "Robustness": 2,
+      "Safety (runtime guardrails)": 2
+    }
+  },
+  "maturity_levels_restricted_od": {
+    "Reliability / validity (calibration)": 3,
+    "Robustness": 4,
+    "Safety (runtime guardrails)": 2
+  },
+  "model_restricted_od": {
+    "accuracy": 0.8722133757961783,
+    "ece": 0.03397756459092826,
+    "error_auroc_total": 0.8298557347555586,
+    "error_auroc_epistemic": 0.5261408774591421,
+    "mean_epistemic": 0.03153624528998215,
+    "mean_aleatoric": 0.5003207658826663,
+    "conformal_coverage_marginal": 0.9002123142250531,
+    "conformal_coverage_mondrian": 0.9122876857749469,
+    "conformal_drone_coverage_mondrian": 0.9113551151580075,
+    "ambiguous_set_rate_mondrian": 0.12340764331210191,
+    "error_by_uncertainty_decile": [
+      0.0,
+      0.006640106241699867,
+      0.010610079575596816,
+      0.034528552456839307,
+      0.05570291777188329,
+      0.08753315649867374,
+      0.13545816733067728,
+      0.19654714475431606,
+      0.3302387267904509,
+      0.4204244031830239
+    ],
+    "policy": {
+      "t": 0.212,
+      "tau": 0.9241595850623501
+    },
+    "policy_rates": {
+      "miss": 0.04231387252276379,
+      "false_alarm": 0.1751709626512362,
+      "deferral": 0.15459129511677283
+    }
+  },
+  "pareto": {
+    "n_policies": 369,
+    "n_pareto_3_objectives": 369,
+    "n_within_capacity": 246,
+    "n_constrained_front": 41,
+    "chosen_on_constrained_front": true
+  },
+  "cost_weights": [
+    5.0,
+    1.0,
+    0.3
+  ],
+  "max_deferral": 0.2,
+  "scorecards": {
+    "initial": [
+      {
+        "characteristic": "Reliability / validity (calibration)",
+        "level": 4,
+        "criteria": [
+          {
+            "level": 1,
+            "requirement": "Held-out accuracy reported",
+            "passed": true,
+            "evidence": "accuracy = 0.813"
+          },
+          {
+            "level": 2,
+            "requirement": "ECE <= 0.1",
+            "passed": true,
+            "evidence": "ECE = 0.036"
+          },
+          {
+            "level": 3,
+            "requirement": "ECE <= 0.05",
+            "passed": true,
+            "evidence": "ECE = 0.036"
+          },
+          {
+            "level": 3,
+            "requirement": "Uncertainty flags errors: AUROC >= 0.75",
+            "passed": true,
+            "evidence": "AUROC = 0.804"
+          },
+          {
+            "level": 4,
+            "requirement": "Conformal coverage within 90% +/- 2%",
+            "passed": true,
+            "evidence": "coverage = 0.898"
+          },
+          {
+            "level": 4,
+            "requirement": "Drone-class coverage >= 88%",
+            "passed": true,
+            "evidence": "drone coverage = 0.957"
+          },
+          {
+            "level": 5,
+            "requirement": "Formal verification of components",
+            "passed": false,
+            "evidence": "not attempted"
+          }
+        ]
+      },
+      {
+        "characteristic": "Robustness",
+        "level": 1,
+        "criteria": [
+          {
+            "level": 1,
+            "requirement": "Held-out accuracy reported",
+            "passed": true,
+            "evidence": "accuracy = 0.813"
+          },
+          {
+            "level": 2,
+            "requirement": "Every operational cell tested with >= 50 samples",
+            "passed": true,
+            "evidence": "36 declared cells, min n = 124"
+          },
+          {
+            "level": 2,
+            "requirement": "Worst-cell accuracy >= 0.7",
+            "passed": false,
+            "evidence": "night/severe/forest: 0.477"
+          },
+          {
+            "level": 3,
+            "requirement": "Uncertainty-guided scenario generation performed",
+            "passed": false,
+            "evidence": "0 guided rounds"
+          },
+          {
+            "level": 3,
+            "requirement": "Worst-cell accuracy 95% lower bound >= 0.7",
+            "passed": false,
+            "evidence": "night/severe/forest: 0.406"
+          },
+          {
+            "level": 4,
+            "requirement": "Per-cell conformal coverage not significantly below target",
+            "passed": true,
+            "evidence": "all cells OK"
+          },
+          {
+            "level": 4,
+            "requirement": "Runtime monitor defers <= 30% (ambiguous sets)",
+            "passed": true,
+            "evidence": "ambiguous-set rate = 0.201"
+          },
+          {
+            "level": 5,
+            "requirement": "Formal verification of components",
+            "passed": false,
+            "evidence": "not attempted"
+          }
+        ]
+      },
+      {
+        "characteristic": "Safety (runtime guardrails)",
+        "level": 2,
+        "criteria": [
+          {
+            "level": 1,
+            "requirement": "Fixed decision threshold",
+            "passed": true,
+            "evidence": "P(drone) >= 0.5"
+          },
+          {
+            "level": 2,
+            "requirement": "Operating point chosen by explicit cost trade-off",
+            "passed": true,
+            "evidence": "t = 0.31, weights (miss, false alarm, defer) = (5.0, 1.0, 0.3)"
+          },
+          {
+            "level": 3,
+            "requirement": "Uncertainty-triggered deferral: miss <= 5%, false alarm <= 10% at deferral <= 25%",
+            "passed": false,
+            "evidence": "miss = 0.032, false alarm = 0.191, deferral = 0.203"
+          },
+          {
+            "level": 4,
+            "requirement": "Drone-class conformal guarantee holds in every cell (miss-rate bound)",
+            "passed": true,
+            "evidence": "all cells OK"
+          },
+          {
+            "level": 5,
+            "requirement": "Formally verified safety monitor",
+            "passed": false,
+            "evidence": "not attempted"
+          }
+        ]
+      }
+    ],
+    "after closed loop": [
+      {
+        "characteristic": "Reliability / validity (calibration)",
+        "level": 3,
+        "criteria": [
+          {
+            "level": 1,
+            "requirement": "Held-out accuracy reported",
+            "passed": true,
+            "evidence": "accuracy = 0.864"
+          },
+          {
+            "level": 2,
+            "requirement": "ECE <= 0.1",
+            "passed": true,
+            "evidence": "ECE = 0.029"
+          },
+          {
+            "level": 3,
+            "requirement": "ECE <= 0.05",
+            "passed": true,
+            "evidence": "ECE = 0.029"
+          },
+          {
+            "level": 3,
+            "requirement": "Uncertainty flags errors: AUROC >= 0.75",
+            "passed": true,
+            "evidence": "AUROC = 0.824"
+          },
+          {
+            "level": 4,
+            "requirement": "Conformal coverage within 90% +/- 2%",
+            "passed": true,
+            "evidence": "coverage = 0.900"
+          },
+          {
+            "level": 4,
+            "requirement": "Drone-class coverage >= 88%",
+            "passed": false,
+            "evidence": "drone coverage = 0.868"
+          },
+          {
+            "level": 5,
+            "requirement": "Formal verification of components",
+            "passed": false,
+            "evidence": "not attempted"
+          }
+        ]
+      },
+      {
+        "characteristic": "Robustness",
+        "level": 2,
+        "criteria": [
+          {
+            "level": 1,
+            "requirement": "Held-out accuracy reported",
+            "passed": true,
+            "evidence": "accuracy = 0.864"
+          },
+          {
+            "level": 2,
+            "requirement": "Every operational cell tested with >= 50 samples",
+            "passed": true,
+            "evidence": "36 declared cells, min n = 124"
+          },
+          {
+            "level": 2,
+            "requirement": "Worst-cell accuracy >= 0.7",
+            "passed": true,
+            "evidence": "dusk/severe/urban: 0.712"
+          },
+          {
+            "level": 3,
+            "requirement": "Uncertainty-guided scenario generation performed",
+            "passed": true,
+            "evidence": "5 guided rounds"
+          },
+          {
+            "level": 3,
+            "requirement": "Worst-cell accuracy 95% lower bound >= 0.7",
+            "passed": false,
+            "evidence": "night/severe/urban: 0.646"
+          },
+          {
+            "level": 4,
+            "requirement": "Per-cell conformal coverage not significantly below target",
+            "passed": true,
+            "evidence": "all cells OK"
+          },
+          {
+            "level": 4,
+            "requirement": "Runtime monitor defers <= 30% (ambiguous sets)",
+            "passed": true,
+            "evidence": "ambiguous-set rate = 0.146"
+          },
+          {
+            "level": 5,
+            "requirement": "Formal verification of components",
+            "passed": false,
+            "evidence": "not attempted"
+          }
+        ]
+      },
+      {
+        "characteristic": "Safety (runtime guardrails)",
+        "level": 2,
+        "criteria": [
+          {
+            "level": 1,
+            "requirement": "Fixed decision threshold",
+            "passed": true,
+            "evidence": "P(drone) >= 0.5"
+          },
+          {
+            "level": 2,
+            "requirement": "Operating point chosen by explicit cost trade-off",
+            "passed": true,
+            "evidence": "t = 0.21, weights (miss, false alarm, defer) = (5.0, 1.0, 0.3)"
+          },
+          {
+            "level": 3,
+            "requirement": "Uncertainty-triggered deferral: miss <= 5%, false alarm <= 10% at deferral <= 25%",
+            "passed": false,
+            "evidence": "miss = 0.046, false alarm = 0.144, deferral = 0.200"
+          },
+          {
+            "level": 4,
+            "requirement": "Drone-class conformal guarantee holds in every cell (miss-rate bound)",
+            "passed": true,
+            "evidence": "all cells OK"
+          },
+          {
+            "level": 5,
+            "requirement": "Formally verified safety monitor",
+            "passed": false,
+            "evidence": "not attempted"
+          }
+        ]
+      }
+    ],
+    "after closed loop, restricted domain": [
+      {
+        "characteristic": "Reliability / validity (calibration)",
+        "level": 3,
+        "criteria": [
+          {
+            "level": 1,
+            "requirement": "Held-out accuracy reported",
+            "passed": true,
+            "evidence": "accuracy = 0.872"
+          },
+          {
+            "level": 2,
+            "requirement": "ECE <= 0.1",
+            "passed": true,
+            "evidence": "ECE = 0.034"
+          },
+          {
+            "level": 3,
+            "requirement": "ECE <= 0.05",
+            "passed": true,
+            "evidence": "ECE = 0.034"
+          },
+          {
+            "level": 3,
+            "requirement": "Uncertainty flags errors: AUROC >= 0.75",
+            "passed": true,
+            "evidence": "AUROC = 0.830"
+          },
+          {
+            "level": 4,
+            "requirement": "Conformal coverage within 90% +/- 2%",
+            "passed": true,
+            "evidence": "coverage = 0.900"
+          },
+          {
+            "level": 4,
+            "requirement": "Drone-class coverage >= 88%",
+            "passed": false,
+            "evidence": "drone coverage = 0.868"
+          },
+          {
+            "level": 5,
+            "requirement": "Formal verification of components",
+            "passed": false,
+            "evidence": "not attempted"
+          }
+        ]
+      },
+      {
+        "characteristic": "Robustness",
+        "level": 4,
+        "criteria": [
+          {
+            "level": 1,
+            "requirement": "Held-out accuracy reported",
+            "passed": true,
+            "evidence": "accuracy = 0.872"
+          },
+          {
+            "level": 2,
+            "requirement": "Every operational cell tested with >= 50 samples",
+            "passed": true,
+            "evidence": "33 declared cells, min n = 124"
+          },
+          {
+            "level": 2,
+            "requirement": "Worst-cell accuracy >= 0.7",
+            "passed": true,
+            "evidence": "night/severe/forest: 0.769"
+          },
+          {
+            "level": 3,
+            "requirement": "Uncertainty-guided scenario generation performed",
+            "passed": true,
+            "evidence": "5 guided rounds"
+          },
+          {
+            "level": 3,
+            "requirement": "Worst-cell accuracy 95% lower bound >= 0.7",
+            "passed": true,
+            "evidence": "night/severe/forest: 0.703"
+          },
+          {
+            "level": 4,
+            "requirement": "Per-cell conformal coverage not significantly below target",
+            "passed": true,
+            "evidence": "all cells OK"
+          },
+          {
+            "level": 4,
+            "requirement": "Runtime monitor defers <= 30% (ambiguous sets)",
+            "passed": true,
+            "evidence": "ambiguous-set rate = 0.123"
+          },
+          {
+            "level": 5,
+            "requirement": "Formal verification of components",
+            "passed": false,
+            "evidence": "not attempted"
+          }
+        ]
+      },
+      {
+        "characteristic": "Safety (runtime guardrails)",
+        "level": 2,
+        "criteria": [
+          {
+            "level": 1,
+            "requirement": "Fixed decision threshold",
+            "passed": true,
+            "evidence": "P(drone) >= 0.5"
+          },
+          {
+            "level": 2,
+            "requirement": "Operating point chosen by explicit cost trade-off",
+            "passed": true,
+            "evidence": "t = 0.21, weights (miss, false alarm, defer) = (5.0, 1.0, 0.3)"
+          },
+          {
+            "level": 3,
+            "requirement": "Uncertainty-triggered deferral: miss <= 5%, false alarm <= 10% at deferral <= 25%",
+            "passed": false,
+            "evidence": "miss = 0.042, false alarm = 0.175, deferral = 0.155"
+          },
+          {
+            "level": 4,
+            "requirement": "Drone-class conformal guarantee holds in every cell (miss-rate bound)",
+            "passed": true,
+            "evidence": "all cells OK"
+          },
+          {
+            "level": 5,
+            "requirement": "Formally verified safety monitor",
+            "passed": false,
+            "evidence": "not attempted"
+          }
+        ]
+      }
+    ]
+  },
+  "restricted_od_excluded_cells": [
+    "night/moderate/urban",
+    "night/severe/urban",
+    "dusk/severe/urban"
+  ]
+}
